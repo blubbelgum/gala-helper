@@ -55,7 +55,7 @@ GameManager.prototype.setup = function () {
   this.grid         = new Grid(this.size);
   // INFO: this is where the game starts & the grid is created with 2 random tiles
   // we disable this to allow for custom grids
-  this.grid.addStartTiles();
+  // this.grid.addStartTiles();
 
   // this.ai           = new AI(this.grid);
   // using SmartAI instead of basic AI
@@ -152,8 +152,8 @@ GameManager.prototype.move = function(direction) {
     this.moveHistory.push(logDirection); // Log the move
     // this.grid.skipComputerMove();
   }
-  this.grid.computerMove();
-  // this.grid.skipComputerMove();
+  // this.grid.computerMove();
+  this.grid.skipComputerMove(); // <-- this function gonna skip any ComputerMove !
 
   if (!this.grid.movesAvailable()) {
     this.over = true;
