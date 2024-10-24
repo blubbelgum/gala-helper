@@ -4,6 +4,7 @@ function GameManager(size, InputManager, Actuator) {
   this.actuator     = new Actuator;
 
   this.running      = false;
+  this.computerGenerateTile = false;
   this.moveHistory  = []; // Initialize moveHistory as an empty array
   this.editModa = false; // Initialize editModa as false
 
@@ -31,9 +32,11 @@ function GameManager(size, InputManager, Actuator) {
   this.inputManager.on('run', function() {
     if (this.running) {
       this.running = false;
+      this.computerGenerateTile = false;
       this.actuator.setRunButton('Auto-run');
     } else {
       this.running = true;
+      this.computerGenerateTile = true;
       this.run()
       this.actuator.setRunButton('Stop');
     }
@@ -152,8 +155,12 @@ GameManager.prototype.move = function(direction) {
     this.moveHistory.push(logDirection); // Log the move
     // this.grid.skipComputerMove();
   }
-  // this.grid.computerMove();
-  this.grid.skipComputerMove(); // <-- this function gonna skip any ComputerMove !
+
+  if(this.computerGenerateTile) {
+    this.grid.computerMove();
+  } else {
+    this.grid.skipComputerMove(); // <-- this function gonna skip any ComputerMove !
+  }
 
   if (!this.grid.movesAvailable()) {
     this.over = true;
