@@ -75,6 +75,11 @@ Grid.prototype.cellAvailable = function(cell) {
   return !this.cellContent(cell);
 };
 
+
+Grid.prototype.cellOccupied = function (cell) {
+  return !!this.cellContent(cell);
+};
+
 /**
  * Get cell content with bounds checking
  * Optimization: Combined bounds check with content retrieval
