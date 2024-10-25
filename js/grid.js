@@ -58,6 +58,10 @@ Grid.prototype.removeTile = function (tile) {
   this.cells[tile.x][tile.y] = null;
 };
 
+Grid.prototype.positionsEqual = function(first, second) {
+  return first.x === second.x && first.y === second.y;
+};
+
 // Optimized bounds checking
 Grid.prototype.withinBounds = function(position) {
   return position.x >= 0 && position.x < this.size &&
