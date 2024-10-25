@@ -50,6 +50,14 @@ Grid.prototype.cellOccupied = function (cell) {
   return !!this.cellContent(cell);
 };
 
+Grid.prototype.insertTile = function (tile) {
+  this.cells[tile.x][tile.y] = tile;
+};
+
+Grid.prototype.removeTile = function (tile) {
+  this.cells[tile.x][tile.y] = null;
+};
+
 // Optimized bounds checking
 Grid.prototype.withinBounds = function(position) {
   return position.x >= 0 && position.x < this.size &&
