@@ -11,6 +11,7 @@ function Grid(size) {
   // Cache frequently accessed values
   this.maxSize = size - 1;
   this.playerTurn = true;
+  this.winValue = 2048; // Define win value as constant
 }
 
 // Pre-compute indexes for better performance
@@ -24,6 +25,15 @@ Grid.prototype.vectors = {
   1: { x: 1, y: 0 },  // right
   2: { x: 0, y: 1 },  // down
   3: { x: -1, y: 0 }  // left
+};
+
+// Check if a tile can be merged
+Grid.prototype.canMerge = function(tile1, tile2) {
+  // Prevent merging if either tile is 2048 or greater
+  if (tile1.value >= this.winValue || tile2.value >= this.winValue) {
+    return false;
+  }
+  return tile1.value === tile2.value;
 };
 
 // Optimized cell availability check
@@ -61,7 +71,7 @@ Grid.prototype.randomAvailableCell = function() {
   return cells.length ? cells[Math.floor(Math.random() * cells.length)] : null;
 };
 
-// Optimized move function with 2048 merge restriction
+// Optimized move function with strict 2048 merge prevention
 Grid.prototype.move = function(direction) {
   const vector = this.vectors[direction];
   const traversals = this.buildTraversals(vector);
@@ -82,9 +92,8 @@ Grid.prototype.move = function(direction) {
         const positions = this.findFarthestPosition(cell, vector);
         const next = this.cellContent(positions.next);
 
-        // Only allow merge if neither tile is 2048
-        if (next && next.value === tile.value && !next.mergedFrom && 
-            tile.value !== 2048) { // Add restriction for 2048 tiles
+        // Check if tiles can be merged using the new canMerge function
+        if (next && !next.mergedFrom && this.canMerge(tile, next)) {
           const merged = new Tile(positions.next, tile.value * 2);
           merged.mergedFrom = [tile, next];
 
@@ -98,8 +107,7 @@ Grid.prototype.move = function(direction) {
           score += merged.value;
 
           // Check for win condition
-          // We didnt need won condition !
-          // if (merged.value === 2048) {
+          // if (merged.value === this.winValue) {
           //   won = true;
           // }
         } else {
@@ -115,6 +123,29 @@ Grid.prototype.move = function(direction) {
   }
 
   return { moved, score, won };
+};
+
+// Check for available matches between tiles
+Grid.prototype.tileMatchesAvailable = function() {
+  for (let x = 0; x < this.size; x++) {
+    for (let y = 0; y < this.size; y++) {
+      const tile = this.cellContent({ x, y });
+
+      if (tile) {
+        // Check all directions
+        for (let direction = 0; direction < 4; direction++) {
+          const vector = this.vectors[direction];
+          const cell = { x: x + vector.x, y: y + vector.y };
+          const other = this.cellContent(cell);
+
+          if (other && this.canMerge(tile, other)) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
 };
 
 // Optimized traversal building
