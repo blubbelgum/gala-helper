@@ -46,6 +46,10 @@ Grid.prototype.cellContent = function(cell) {
   return this.withinBounds(cell) ? this.cells[cell.x][cell.y] : null;
 };
 
+Grid.prototype.cellOccupied = function (cell) {
+  return !!this.cellContent(cell);
+};
+
 // Optimized bounds checking
 Grid.prototype.withinBounds = function(position) {
   return position.x >= 0 && position.x < this.size &&
