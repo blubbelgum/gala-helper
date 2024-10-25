@@ -69,6 +69,16 @@ Grid.prototype.availableCells = function() {
   return cells;
 };
 
+// Check if there are any cells available
+Grid.prototype.cellsAvailable = function () {
+  return !!this.availableCells().length;
+};
+
+// Check if the specified cell is taken
+Grid.prototype.cellAvailable = function (cell) {
+  return !this.cellOccupied(cell);
+};
+
 // Optimized random available cell selection
 Grid.prototype.randomAvailableCell = function() {
   const cells = this.availableCells();
