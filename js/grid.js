@@ -62,6 +62,15 @@ Grid.prototype.positionsEqual = function(first, second) {
   return first.x === second.x && first.y === second.y;
 };
 
+Grid.prototype.computerMove = function() {
+  this.addRandomTile();
+  this.playerTurn = true;
+}
+
+Grid.prototype.skipComputerMove = function() {
+  this.playerTurn = true;
+}
+
 // Optimized bounds checking
 Grid.prototype.withinBounds = function(position) {
   return position.x >= 0 && position.x < this.size &&
