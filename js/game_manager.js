@@ -71,30 +71,6 @@ GameManager.prototype.setup = function () {
   this.actuate();
 };
 
-// NEW FUNCTION: Set up the game with a custom grid
-GameManager.prototype.setCustomGrid = function (customGrid) {
-  this.grid = new Grid(this.size); // Create a new empty grid
-  for (var i = 0; i < customGrid.length; i++) {
-    for (var j = 0; j < customGrid[i].length; j++) {
-      if (customGrid[i][j] > 0) {
-        // Correct the coordinates by swapping i and j
-        var tile = new Tile({ x: j, y: i }, customGrid[i][j]);
-        this.grid.insertTile(tile);  // Insert the tile into the grid
-      }
-    }
-  }
-
-  this.ai = new SmartAI(this.grid);  // Initialize AI with the custom grid
-  // this.ai = new AI(this.grid);  // Initialize AI with the custom grid
-
-  this.score = 0;
-  this.over  = false;
-  this.won   = false;
-
-  // Update the actuator with the new custom grid
-  this.actuate();
-};
-
 
 // New method to handle cell clicks
 GameManager.prototype.handleCellClick = function (x, y) {
@@ -122,8 +98,15 @@ GameManager.prototype.handleCellClick = function (x, y) {
       tile.isNew = true;
     }
   }
-  this.actuate();
 
+  this.actuate();
+  // running auto hint
+  let best = this.ai.getBest();
+  if (best && best.move !== undefined) {
+    this.actuator.showHint(best.move);
+  } else {
+    console.error('Error: best.move is undefined');
+  }
 };
 
 
@@ -140,6 +123,9 @@ GameManager.prototype.actuate = function () {
 // Update the move function to log each move
 GameManager.prototype.move = function(direction) {
 
+  var result = this.grid.move(direction);
+  this.score += result.score;
+
   if(this.computerGenerateTile) {
     this.grid.computerMove();
   } else {
@@ -151,6 +137,14 @@ GameManager.prototype.move = function(direction) {
   }
 
   this.actuate();
+
+  // running auto hint
+  let best = this.ai.getBest();
+  if (best && best.move !== undefined) {
+    this.actuator.showHint(best.move);
+  } else {
+    console.error('Error: best.move is undefined');
+  }
 };
 
 // moves continuously until game is over
@@ -167,6 +161,7 @@ GameManager.prototype.run = function() {
 }
 
 GameManager.prototype.toggleEditMode = function () {
+  console.log("Toggling edit mode emiting");
   this.editMode = !this.editMode;
   this.actuator.setEditMode(this.editMode);
 };
