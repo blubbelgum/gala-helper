@@ -4,7 +4,6 @@ function HTMLActuator() {
   this.messageContainer = document.getElementsByClassName("game-message")[0];
   this.sharingContainer = document.getElementsByClassName("score-sharing")[0];
 
-  this.moveHistoryContainer = document.querySelector(".move-history");
   this.editModeContainer = document.querySelector(".edit-mode-container");
   this.resetButton = document.querySelector(".reset-button");
 
@@ -35,7 +34,6 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
     }
 
     self.updateEditModeStatus(metadata.editMode);
-    self.updateMoveHistory(metadata.moveHistory);
   });
 };
 
@@ -157,20 +155,6 @@ HTMLActuator.prototype.clearMessage = function () {
   this.messageContainer.classList.remove("game-won", "game-over");
 };
 
-// HTMLActuator.prototype.scoreTweetButton = function () {
-//   var tweet = document.createElement("a");
-//   tweet.classList.add("twitter-share-button");
-//   tweet.setAttribute("href", "https://twitter.com/share");
-//   tweet.setAttribute("data-via", "gabrielecirulli");
-//   tweet.textContent = "Tweet";
-
-//   var text = "I scored " + this.score + " points at 2048, a game where you " +
-//              "join numbers to score high! #2048game #2048ai";
-//   tweet.setAttribute("data-text", text);
-
-//   return tweet;
-// };
-
 
 HTMLActuator.prototype.showHint = function(hint) {
   document.getElementById('feedback-container').innerHTML = ['↑','→','↓','←'][hint];
@@ -178,24 +162,6 @@ HTMLActuator.prototype.showHint = function(hint) {
 
 HTMLActuator.prototype.setRunButton = function(message) {
   document.getElementById('run-button').innerHTML = message;
-}
-
-HTMLActuator.prototype.updateMoveHistory = function(moveHistory) {
-  if (!this.moveHistoryContainer) return; // Exit if container doesn't exist
-
-  this.moveHistoryContainer.innerHTML = ""; // Clear existing content
-
-  var header = document.createElement("h3");
-  header.textContent = "Move History";
-  this.moveHistoryContainer.appendChild(header);
-
-  var list = document.createElement("ul");
-  moveHistory.forEach(function(move, index) {
-    var item = document.createElement("li");
-    item.textContent = (index + 1) + ". " + move;
-    list.appendChild(item);
-  });
-  this.moveHistoryContainer.appendChild(list);
 }
 
 HTMLActuator.prototype.updateEditModeStatus = function(isEditMode) {

@@ -5,8 +5,7 @@ function GameManager(size, InputManager, Actuator) {
 
   this.running      = false;
   this.computerGenerateTile = false;
-  this.moveHistory  = []; // Initialize moveHistory as an empty array
-  this.editModa = false; // Initialize editModa as false
+  this.editMode = false; // Initialize editMode as false
 
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
@@ -67,7 +66,6 @@ GameManager.prototype.setup = function () {
   this.score        = 0;
   this.over         = false;
   this.won          = false;
-  this.moveHistory  = []; // Reset moveHistory when setting up a new game
 
   // Update the actuator
   this.actuate();
@@ -135,26 +133,12 @@ GameManager.prototype.actuate = function () {
     score: this.score,
     over:  this.over,
     won:   this.won,
-    moveHistory: this.moveHistory
   });
 };
 
 // Update the move method to ensure new tiles are considered
 // Update the move function to log each move
 GameManager.prototype.move = function(direction) {
-  var result = this.grid.move(direction);
-  this.score += result.score;
-
-  // compare the current board to the previous board
-  // return false if the board has not changed
-
-
-
-  if (result.moved) {
-    let logDirection = direction == 0 ? 'up' : direction == 1 ? 'right' : direction == 2 ? 'down' : 'left';
-    this.moveHistory.push(logDirection); // Log the move
-    // this.grid.skipComputerMove();
-  }
 
   if(this.computerGenerateTile) {
     this.grid.computerMove();
@@ -168,11 +152,6 @@ GameManager.prototype.move = function(direction) {
 
   this.actuate();
 };
-
-// Add a new function to get the move history
-GameManager.prototype.getMoveHistory = function() {
-  return this.moveHistory;
-}
 
 // moves continuously until game is over
 GameManager.prototype.run = function() {
