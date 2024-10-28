@@ -101,12 +101,12 @@ GameManager.prototype.handleCellClick = function (x, y) {
 
   this.actuate();
   // running auto hint
-  let best = this.ai.getBest();
-  if (best && best.move !== undefined) {
-    this.actuator.showHint(best.move);
-  } else {
-    console.error('Error: best.move is undefined');
-  }
+  // let best = this.ai.getBest();
+  // if (best && best.move !== undefined) {
+  //   this.actuator.showHint(best.move);
+  // } else {
+  //   console.error('Error: best.move is undefined');
+  // }
 };
 
 
@@ -139,12 +139,12 @@ GameManager.prototype.move = function(direction) {
   this.actuate();
 
   // running auto hint
-  let best = this.ai.getBest();
-  if (best && best.move !== undefined) {
-    this.actuator.showHint(best.move);
-  } else {
-    console.error('Error: best.move is undefined');
-  }
+  // let best = this.ai.getBest();
+  // if (best && best.move !== undefined) {
+  //   this.actuator.showHint(best.move);
+  // } else {
+  //   console.error('Error: best.move is undefined');
+  // }
 };
 
 // moves continuously until game is over
