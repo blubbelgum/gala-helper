@@ -49,8 +49,8 @@ SmartAI = function(game) {
 };
 
 SmartAI.prototype.nextMove = function() {
-  // Uses depth-6 search for move evaluation
-  return this.chooseBestMove2(this.game.grid, 6);
+  // Uses depth-5 search for move evaluation
+  return this.chooseBestMove2(this.game.grid, 5);
 };
 
 SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
